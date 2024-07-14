@@ -4,8 +4,9 @@ export interface ExpenseDocument
   extends mongoose.Document<mongoose.Types.ObjectId> {
   name: string;
   amount: number;
-  budget: mongoose.Schema.Types.ObjectId;
-  user: mongoose.Schema.Types.ObjectId;
+  budgetId: mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
+  categoryId: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   omitSensitiveInfo(): Pick<
@@ -13,8 +14,9 @@ export interface ExpenseDocument
     | "_id"
     | "name"
     | "amount"
-    | "budget"
-    | "user"
+    | "budgetId"
+    | "userId"
+    | "categoryId"
     | "createdAt"
     | "updatedAt"
     | "__v"
@@ -25,12 +27,21 @@ const expenseSchema = new mongoose.Schema<ExpenseDocument>(
   {
     name: { type: String, required: true },
     amount: { type: Number, required: true },
-    budget: {
+    budgetId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Budget",
       required: true,
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -9,6 +9,9 @@ import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import sessionRoutes from "./routes/session.route";
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
+import budgetRoutes from "./routes/budget.route";
+import expenseRoutes from "./routes/expense.route";
+import goalRoutes from "./routes/goal.route";
 
 const app = express();
 
