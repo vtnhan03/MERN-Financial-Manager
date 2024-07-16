@@ -8,6 +8,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import { setNavigate } from "./lib/navigation";
+import Home from "./pages/Home";
+import BudgetForm from "./pages/BudgetForm";
+import GoalForm from "./pages/GoalForm";
+import BudgetDetails from "./pages/BudgetDetails";
+import ExpenseForm from "./pages/ExpenseForm";
+import GoalDetails from "./pages/GoalDetails";
+import UpdateBudgetForm from "./pages/UpdateBudgetForm";
+import UpdateGoalForm from "./pages/UpdateGoalForm";
 
 function App() {
   // set the navigate function on our API client for use in the axios error interceptor
@@ -17,8 +25,17 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<AppContainer />}>
-        <Route index element={<Profile />} />
+        <Route index element={<Home />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="add-budget" element={<BudgetForm />} />
+        <Route path="add-goal" element={<GoalForm />} />
+        <Route path="add-expense" element={<ExpenseForm />} />
+        <Route path="update-budget/:budgetId" element={<UpdateBudgetForm />} />
+        <Route path="update-goal/:goalId" element={<UpdateGoalForm />} />
+
+        <Route path="goals/:goalId" element={<GoalDetails />} />
+        <Route path="budgets/:budgetId" element={<BudgetDetails />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

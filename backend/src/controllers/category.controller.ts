@@ -9,10 +9,16 @@ export const getCategoriesHandler = catchErrors(async (req, res) => {
   return res.status(OK).json(categories);
 });
 
+export const getCategoriesByIdHandler = catchErrors(async (req, res) => {
+  const category = await CategoryModel.findOne({ _id: req.params.id });
+  appAssert(category, NOT_FOUND, "Category not found");
+  return res.status(OK).json(category);
+});
+
 export const createCategoryHandler = catchErrors(async (req, res) => {
   const category = await CategoryModel.create({
     ...req.body,
-    userId: req.userId,
+    // userId: req.userId,
   });
 
   appAssert(category, NOT_FOUND, "Category could not be created");
@@ -21,10 +27,12 @@ export const createCategoryHandler = catchErrors(async (req, res) => {
 });
 
 export const updateCategoryHandler = catchErrors(async (req, res) => {
+  console.log(req.params.id);
+
   const category = await CategoryModel.findOneAndUpdate(
     {
       _id: req.params.id,
-      userId: req.userId,
+      //   userId: req.userId,
     },
     req.body,
     { new: true }
@@ -36,7 +44,7 @@ export const updateCategoryHandler = catchErrors(async (req, res) => {
 export const deleteCategoryHandler = catchErrors(async (req, res) => {
   const deleted = await CategoryModel.findOneAndDelete({
     _id: req.params.id,
-    userId: req.userId,
+    // userId: req.userId,
   });
   appAssert(deleted, NOT_FOUND, "Category not found");
   return res.status(OK).json({ message: "Category deleted" });

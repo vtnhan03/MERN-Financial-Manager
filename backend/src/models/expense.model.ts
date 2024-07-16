@@ -9,18 +9,7 @@ export interface ExpenseDocument
   categoryId: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
-  omitSensitiveInfo(): Pick<
-    ExpenseDocument,
-    | "_id"
-    | "name"
-    | "amount"
-    | "budgetId"
-    | "userId"
-    | "categoryId"
-    | "createdAt"
-    | "updatedAt"
-    | "__v"
-  >;
+  expenseDate: Date;
 }
 
 const expenseSchema = new mongoose.Schema<ExpenseDocument>(
@@ -42,16 +31,12 @@ const expenseSchema = new mongoose.Schema<ExpenseDocument>(
       ref: "User",
       required: true,
     },
+    expenseDate: { type: Date, required: true, default: Date.now },
   },
   {
     timestamps: true,
   }
 );
-
-expenseSchema.methods.omitSensitiveInfo = function () {
-  const expense = this.toObject();
-  return expense;
-};
 
 const ExpenseModel = mongoose.model<ExpenseDocument>("Expense", expenseSchema);
 export default ExpenseModel;

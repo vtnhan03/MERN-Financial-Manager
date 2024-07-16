@@ -2,18 +2,33 @@ import catchErrors from "../utils/catchErrors";
 import ExpenseModel from "../models/expense.model";
 import { NOT_FOUND, OK } from "../constants/http";
 import appAssert from "../utils/appAssert";
+import {
+  addExpenseAndUpdateBudget,
+  removeExpenseAndUpdateBudget,
+} from "../services/expense.service";
 
-export const getExpensesHandler = catchErrors(async (req, res) => {
+export const getAlLExpensesHandler = catchErrors(async (req, res) => {
   const expenses = await ExpenseModel.find({ userId: req.userId });
+  console.log(req.userId);
+  appAssert(expenses, NOT_FOUND, "Expenses not found");
+  return res.status(OK).json(expenses);
+});
+
+export const getExpensesByBudgetIdHandler = catchErrors(async (req, res) => {
+  const expenses = await ExpenseModel.find({
+    budgetId: req.params.budgetId,
+    userId: req.userId,
+  });
   appAssert(expenses, NOT_FOUND, "Expenses not found");
   return res.status(OK).json(expenses);
 });
 
 export const createExpenseHandler = catchErrors(async (req, res) => {
-  const expense = await ExpenseModel.create({
+  console.log(req.body.budgetId);
+  const expense = await addExpenseAndUpdateBudget({
     ...req.body,
     userId: req.userId,
-  });
+  }); // Corrected line
 
   appAssert(expense, NOT_FOUND, "Expense could not be created");
 
@@ -33,9 +48,11 @@ export const updateExpenseHandler = catchErrors(async (req, res) => {
 });
 
 export const deleteExpenseHandler = catchErrors(async (req, res) => {
-  await ExpenseModel.findOneAndDelete({
-    _id: req.params.id,
-    userId: req.userId,
-  });
-  return res.status(OK).json({ message: "Expense deleted" });
+  const { expense, message } = await removeExpenseAndUpdateBudget(
+    req.params.id
+  );
+
+  appAssert(expense, NOT_FOUND, "Expense not found");
+
+  return res.status(OK).json({ message });
 });

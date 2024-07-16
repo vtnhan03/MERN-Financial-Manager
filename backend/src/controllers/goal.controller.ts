@@ -10,6 +10,15 @@ export const getGoalsHandler = catchErrors(async (req, res) => {
   return res.status(OK).json(goals);
 });
 
+export const getGoalByIdHandler = catchErrors(async (req, res) => {
+  const goal = await GoalModel.findOne({
+    _id: req.params.id,
+    userId: req.userId,
+  });
+  appAssert(goal, NOT_FOUND, "Goal not found");
+  return res.status(OK).json(goal);
+});
+
 export const createGoalHandler = catchErrors(async (req, res) => {
   const goal = await GoalModel.create({
     ...req.body,

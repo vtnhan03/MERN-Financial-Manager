@@ -12,6 +12,8 @@ import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 import budgetRoutes from "./routes/budget.route";
 import expenseRoutes from "./routes/expense.route";
 import goalRoutes from "./routes/goal.route";
+import categoryRoutes from "./routes/category.route";
+import transactionRoutes from "./routes/transaction.route";
 
 const app = express();
 
@@ -42,6 +44,8 @@ app.use("/sessions", authenticate, sessionRoutes);
 app.use("/expenses", authenticate, expenseRoutes);
 app.use("/budgets", authenticate, budgetRoutes);
 app.use("/goals", authenticate, goalRoutes);
+app.use("/transactions", authenticate, transactionRoutes);
+app.use("/categories", categoryRoutes);
 
 // error handler
 app.use(errorHandler);

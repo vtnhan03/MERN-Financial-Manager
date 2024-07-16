@@ -21,6 +21,8 @@ export const createBudgetHandler = catchErrors(async (req, res) => {
 });
 
 export const updateBudgetHandler = catchErrors(async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
   const budget = await BudgetModel.findOneAndUpdate(
     {
       _id: req.params.id,
@@ -34,9 +36,19 @@ export const updateBudgetHandler = catchErrors(async (req, res) => {
 });
 
 export const deleteBudgetHandler = catchErrors(async (req, res) => {
-  await BudgetModel.findOneAndDelete({
+  const deleted = await BudgetModel.findOneAndDelete({
     _id: req.params.id,
     userId: req.userId,
   });
+  appAssert(deleted, NOT_FOUND, "Budget not found");
   return res.status(OK).json({ message: "Budget deleted" });
+});
+
+export const getBudgetByIdHandler = catchErrors(async (req, res) => {
+  const budget = await BudgetModel.findOne({
+    _id: req.params.id,
+    userId: req.userId,
+  });
+  appAssert(budget, NOT_FOUND, "Budget not found");
+  return res.status(OK).json(budget);
 });
